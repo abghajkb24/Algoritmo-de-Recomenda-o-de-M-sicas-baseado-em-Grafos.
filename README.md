@@ -15,7 +15,7 @@ Relacionamentos:
 :BELONGS_TO: Song → Genre (uma música pertence a um gênero)
 :HAS_ARTIST: Artist → Genre (um artista faz música de um gênero).
 
-Instalação das dependências:
+Instalação das dependências: 
 Python:
 
 bash
@@ -34,7 +34,7 @@ Passos para executar:
 
 3- Atualize as credenciais nos scripts Python/Node.js.
 
-4- Execute o script: python music_recommendation.py ou node music_recommendation.js
+4- Execute o script: python music_recommendation.py ou node music_recommendation.js 
 Este é um projeto completo e escalável! 🎵 Você pode expandir adicionando:
 
 Mais usuários e músicas
