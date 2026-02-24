@@ -1,0 +1,15 @@
+// Recomendação híbrida: músicas de amigos E do gênero favorito
+MATCH (user:User {username: "alice"})
+// Encontrar gênero favorito
+MATCH (user)-[:LISTENED_TO]->(song1:Song)-[:BELONGS_TO]->(genre:Genre)
+WITH user, genre, COUNT(song1) as genreCount
+ORDER BY genreCount DESC
+LIMIT 1
+// Recomendações: amigos que ouvem músicas do gênero favorito
+MATCH (user)-[:FOLLOWS]->(friend)-[:LISTENED_TO]->(song2:Song)
+  -[:BELONGS_TO]->(genre)
+WHERE NOT (user)-[:LISTENED_TO]->(song2)
+RETURN DISTINCT song2.title as Música, friend.username as Amigo, 
+  genre.name as Gênero, COUNT(friend) as AmigosQueOuvem
+ORDER BY AmigosQueOuvem DESC, song2.title
+LIMIT 10;

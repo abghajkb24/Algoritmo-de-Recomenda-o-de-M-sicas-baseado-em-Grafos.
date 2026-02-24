@@ -1,0 +1,115 @@
+// Limpar banco de dados (apenas para testes iniciais)
+MATCH (n) DETACH DELETE n;
+
+// Criar Gêneros
+CREATE (g1:Genre {id: "pop", name: "Pop"})
+CREATE (g2:Genre {id: "rock", name: "Rock"})
+CREATE (g3:Genre {id: "hiphop", name: "Hip-Hop"})
+CREATE (g4:Genre {id: "jazz", name: "Jazz"});
+
+// Criar Artistas
+CREATE (a1:Artist {id: "artist_1", name: "Taylor Swift"})
+CREATE (a2:Artist {id: "artist_2", name: "The Beatles"})
+CREATE (a3:Artist {id: "artist_3", name: "Drake"})
+CREATE (a4:Artist {id: "artist_4", name: "Miles Davis"});
+
+// Criar Músicas
+CREATE (s1:Song {id: "song_1", title: "Shake It Off", duration: 219})
+CREATE (s2:Song {id: "song_2", title: "Blank Space", duration: 231})
+CREATE (s3:Song {id: "song_3", title: "Hey Jude", duration: 431})
+CREATE (s4:Song {id: "song_4", title: "Let It Be", duration: 243})
+CREATE (s5:Song {id: "song_5", title: "God's Plan", duration: 238})
+CREATE (s6:Song {id: "song_6", title: "Hotline Bling", duration: 267})
+CREATE (s7:Song {id: "song_7", title: "Kind of Blue", duration: 541})
+CREATE (s8:Song {id: "song_8", title: "So What", duration: 540});
+
+// Criar Usuários
+CREATE (u1:User {id: "user_1", username: "alice", email: "alice@example.com"})
+CREATE (u2:User {id: "user_2", username: "bob", email: "bob@example.com"})
+CREATE (u3:User {id: "user_3", username: "charlie", email: "charlie@example.com"})
+CREATE (u4:User {id: "user_4", username: "diana", email: "diana@example.com"});
+
+// Relacionar Músicas com Artistas
+MATCH (s1:Song {id: "song_1"}), (a1:Artist {id: "artist_1"})
+CREATE (s1)-[:CREATED_BY]->(a1);
+MATCH (s2:Song {id: "song_2"}), (a1:Artist {id: "artist_1"})
+CREATE (s2)-[:CREATED_BY]->(a1);
+MATCH (s3:Song {id: "song_3"}), (a2:Artist {id: "artist_2"})
+CREATE (s3)-[:CREATED_BY]->(a2);
+MATCH (s4:Song {id: "song_4"}), (a2:Artist {id: "artist_2"})
+CREATE (s4)-[:CREATED_BY]->(a2);
+MATCH (s5:Song {id: "song_5"}), (a3:Artist {id: "artist_3"})
+CREATE (s5)-[:CREATED_BY]->(a3);
+MATCH (s6:Song {id: "song_6"}), (a3:Artist {id: "artist_3"})
+CREATE (s6)-[:CREATED_BY]->(a3);
+MATCH (s7:Song {id: "song_7"}), (a4:Artist {id: "artist_4"})
+CREATE (s7)-[:CREATED_BY]->(a4);
+MATCH (s8:Song {id: "song_8"}), (a4:Artist {id: "artist_4"})
+CREATE (s8)-[:CREATED_BY]->(a4);
+
+// Relacionar Músicas com Gêneros
+MATCH (s1:Song {id: "song_1"}), (g1:Genre {id: "pop"})
+CREATE (s1)-[:BELONGS_TO]->(g1);
+MATCH (s2:Song {id: "song_2"}), (g1:Genre {id: "pop"})
+CREATE (s2)-[:BELONGS_TO]->(g1);
+MATCH (s3:Song {id: "song_3"}), (g2:Genre {id: "rock"})
+CREATE (s3)-[:BELONGS_TO]->(g2);
+MATCH (s4:Song {id: "song_4"}), (g2:Genre {id: "rock"})
+CREATE (s4)-[:BELONGS_TO]->(g2);
+MATCH (s5:Song {id: "song_5"}), (g3:Genre {id: "hiphop"})
+CREATE (s5)-[:BELONGS_TO]->(g3);
+MATCH (s6:Song {id: "song_6"}), (g3:Genre {id: "hiphop"})
+CREATE (s6)-[:BELONGS_TO]->(g3);
+MATCH (s7:Song {id: "song_7"}), (g4:Genre {id: "jazz"})
+CREATE (s7)-[:BELONGS_TO]->(g4);
+MATCH (s8:Song {id: "song_8"}), (g4:Genre {id: "jazz"})
+CREATE (s8)-[:BELONGS_TO]->(g4);
+
+// Relacionar Artistas com Gêneros
+MATCH (a1:Artist {id: "artist_1"}), (g1:Genre {id: "pop"})
+CREATE (a1)-[:HAS_ARTIST]->(g1);
+MATCH (a2:Artist {id: "artist_2"}), (g2:Genre {id: "rock"})
+CREATE (a2)-[:HAS_ARTIST]->(g2);
+MATCH (a3:Artist {id: "artist_3"}), (g3:Genre {id: "hiphop"})
+CREATE (a3)-[:HAS_ARTIST]->(g3);
+MATCH (a4:Artist {id: "artist_4"}), (g4:Genre {id: "jazz"})
+CREATE (a4)-[:HAS_ARTIST]->(g4);
+
+// Usuários ouvem músicas (LISTENED_TO com contagem)
+MATCH (u1:User {id: "user_1"}), (s1:Song {id: "song_1"})
+CREATE (u1)-[:LISTENED_TO {count: 15}]->(s1);
+MATCH (u1:User {id: "user_1"}), (s2:Song {id: "song_2"})
+CREATE (u1)-[:LISTENED_TO {count: 8}]->(s2);
+MATCH (u1:User {id: "user_1"}), (s3:Song {id: "song_3"})
+CREATE (u1)-[:LISTENED_TO {count: 12}]->(s3);
+
+MATCH (u2:User {id: "user_2"}), (s2:Song {id: "song_2"})
+CREATE (u2)-[:LISTENED_TO {count: 10}]->(s2);
+MATCH (u2:User {id: "user_2"}), (s5:Song {id: "song_5"})
+CREATE (u2)-[:LISTENED_TO {count: 20}]->(s5);
+MATCH (u2:User {id: "user_2"}), (s6:Song {id: "song_6"})
+CREATE (u2)-[:LISTENED_TO {count: 18}]->(s6);
+
+MATCH (u3:User {id: "user_3"}), (s3:Song {id: "song_3"})
+CREATE (u3)-[:LISTENED_TO {count: 25}]->(s3);
+MATCH (u3:User {id: "user_3"}), (s4:Song {id: "song_4"})
+CREATE (u3)-[:LISTENED_TO {count: 22}]->(s4);
+MATCH (u3:User {id: "user_3"}), (s7:Song {id: "song_7"})
+CREATE (u3)-[:LISTENED_TO {count: 14}]->(s7);
+
+MATCH (u4:User {id: "user_4"}), (s1:Song {id: "song_1"})
+CREATE (u4)-[:LISTENED_TO {count: 9}]->(s1);
+MATCH (u4:User {id: "user_4"}), (s7:Song {id: "song_7"})
+CREATE (u4)-[:LISTENED_TO {count: 17}]->(s7);
+MATCH (u4:User {id: "user_4"}), (s8:Song {id: "song_8"})
+CREATE (u4)-[:LISTENED_TO {count: 11}]->(s8);
+
+// Usuários seguem usuários (FOLLOWS)
+MATCH (u1:User {id: "user_1"}), (u2:User {id: "user_2"})
+CREATE (u1)-[:FOLLOWS]->(u2);
+MATCH (u1:User {id: "user_1"}), (u3:User {id: "user_3"})
+CREATE (u1)-[:FOLLOWS]->(u3);
+MATCH (u2:User {id: "user_2"}), (u3:User {id: "user_3"})
+CREATE (u2)-[:FOLLOWS]->(u3);
+MATCH (u3:User {id: "user_3"}), (u4:User {id: "user_4"})
+CREATE (u3)-[:FOLLOWS]->(u4);
